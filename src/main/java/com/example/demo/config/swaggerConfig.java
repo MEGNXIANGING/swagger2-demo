@@ -3,7 +3,10 @@ package com.example.demo.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
+
+import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
@@ -11,6 +14,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * @Author: apple
@@ -38,6 +42,17 @@ public class swaggerConfig {
     public Docket docket(){
         return new Docket(DocumentationType.SWAGGER_2).groupName("测试组")
                 .apiInfo(apiInfo())
+        		.globalOperationParameters(Collections.singletonList(
+                        new ParameterBuilder()
+                                .name("Authorization")
+                                .modelRef(new ModelRef("string"))
+                                .parameterType("header")
+                                .required(true)
+                                .hidden(true)
+                                .defaultValue("Bearer ")
+                                .build()
+                        )
+                )
                 .select()
                 //生效条件
                 .apis(RequestHandlerSelectors.withClassAnnotation(RestController.class))
